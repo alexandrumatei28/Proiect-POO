@@ -2,9 +2,9 @@
 #include <cstring>
 using namespace std;
 
-class Animale
+class Animal
 {
-    friend istream &operator>>(istream &is, Animale &animal);
+    friend istream &operator>>(istream &is, Animal &animal);
     string denumire;
     int varsta;
     string specie;
@@ -13,8 +13,8 @@ class Animale
     static int numarAnimale;
 
 public:
-    Animale();
-    Animale(string n, int v, string s, bool c);
+    Animal();
+    Animal(string n, int v, string s, bool c);
 
     string getDenumire();
     int getVarsta();
@@ -25,9 +25,9 @@ public:
     static int getNumarAnimale();
 };
 
-int Animale::numarAnimale = 0;
+int Animal::numarAnimale = 0;
 
-Animale::Animale()
+Animal::Animal()
 {
     denumire = "";
     varsta = 0;
@@ -36,7 +36,7 @@ Animale::Animale()
     numarAnimale++;
 }
 
-istream &operator>>(istream &is, Animale &animal)
+istream &operator>>(istream &is, Animal &animal)
 {
     cout << "Denumirea animalului: ";
     is >> animal.denumire;
@@ -60,45 +60,45 @@ istream &operator>>(istream &is, Animale &animal)
     return is;
 }
 
-Animale::Animale(string n, int v, string s, bool c) : denumire(n), varsta(v), specie(s), carnivora(c)
+Animal::Animal(string n, int v, string s, bool c) : denumire(n), varsta(v), specie(s), carnivora(c) {}
 
-                                                                                             string Animale::getDenumire()
+string Animal::getDenumire()
 {
     return denumire;
 }
 
-int Animale::getVarsta()
+int Animal::getVarsta()
 {
     return varsta;
 }
 
-int Animale::getNumarAnimale()
+int Animal::getNumarAnimale()
 {
     return numarAnimale;
 }
 
-string Animale::getSpecie()
+string Animal::getSpecie()
 {
     return specie;
 }
 
-bool Animale::getCarnivora()
+bool Animal::getCarnivora()
 {
     return carnivora;
 }
 
-string Animale::getStareDeSanatate()
+string Animal::getStareDeSanatate()
 {
     return stareDeSanatate;
 }
 
-void Animale::setStareDeSanatate(string stare)
+void Animal::setStareDeSanatate(string stare)
 {
     stareDeSanatate = stare;
 }
 
 // Supraincarcare operator <<
-ostream &operator<<(ostream &out, Animale &animal)
+ostream &operator<<(ostream &out, Animal &animal)
 {
     out << "Denumire: " << animal.getDenumire() << endl;
     out << "Varsta: " << animal.getVarsta() << endl;
@@ -109,22 +109,22 @@ ostream &operator<<(ostream &out, Animale &animal)
     return out;
 }
 
-class Bilete
+class Bilet
 {
-    friend istream &operator>>(istream &is, Bilete &bilet);
+    friend istream &operator>>(istream &is, Bilet &bilet);
     int pret;
     string tip;
     int numar_vandute;
 
 public:
-    Bilete();
-    Bilete(int p, string tip);
+    Bilet();
+    Bilet(int p, string tip);
     void Cumpara(int n);
     int Venit();
 };
 
 // Constructor fara parametru pentru clasa Bilete
-Bilete::Bilete()
+Bilet::Bilet()
 {
     pret = 0;
     tip = "";
@@ -132,7 +132,7 @@ Bilete::Bilete()
 }
 
 // Constructor cu parametru pentru clasa Bilete
-Bilete::Bilete(int p, string t)
+Bilet::Bilet(int p, string t)
 {
     pret = p;
     tip = t;
@@ -140,7 +140,7 @@ Bilete::Bilete(int p, string t)
 }
 
 // Supraincarcare operator >>
-istream &operator>>(istream &is, Bilete &bilet)
+istream &operator>>(istream &is, Bilet &bilet)
 {
     cout << "Categoria de bilete: ";
     is >> bilet.tip;
@@ -152,12 +152,12 @@ istream &operator>>(istream &is, Bilete &bilet)
     return is;
 }
 
-void Bilete::Cumpara(int n)
+void Bilet::Cumpara(int n)
 {
     numar_vandute += n;
 }
 
-int Bilete::Venit()
+int Bilet::Venit()
 {
     return pret * numar_vandute;
 }
@@ -168,7 +168,7 @@ void BileteVandute()
 
     for (i = 1; i <= nrCategorii; i++)
     {
-        Bilete bilet;
+        Bilet bilet;
         cin >> bilet;
 
         venitTotal += bilet.Venit();
@@ -183,18 +183,18 @@ void BileteVandute()
 
 class HranaAnimale
 {
-    Animale *animal;
+    Animal *animal;
     string nume;
     int cantitate;
 
 public:
-    HranaAnimale(Animale *a, string n, int c);
+    HranaAnimale(Animal *a, string n, int c);
     void HranaData(int c);
     void Afisare();
     void RezervareMancare();
 };
 
-HranaAnimale::HranaAnimale(Animale *a, string n, int c)
+HranaAnimale::HranaAnimale(Animal *a, string n, int c)
 {
     animal = a;
     nume = n;
@@ -226,48 +226,49 @@ void HranaAnimale::RezervareMancare()
 }
 
 // Alocare dinamica pentru vector de obiecte
-class Angajati
+class Angajat
 {
 protected:
-    Animale **animale;
+    Animal **animale;
     int numarAnimale;
     string nume;
     int salariu;
     static int numarAngajati; // VARIABILA STATICA
 
 public:
-    Angajati(string n, int s, int nr);
-    Angajati(const Angajati &angajat);
-    Angajati &operator=(const Angajati &angajat);
-    void AnimaleIngrijite(int index, Animale *animal);
+    Angajat(){};
+    Angajat(string n, int s, int nr);
+    Angajat(const Angajat &angajat);
+    Angajat &operator=(const Angajat &angajat);
+    void AnimaleIngrijite(int index, Animal *animal);
     void Salariu(int marire);
     void Salariu(double marire);
     void setSalariu(int salariu);
     int getSalariu();
-    static int getNrAngajati();
+    static int getNrAngajati(); 
     void Afisare();
-    virtual ~Angajati();
+    virtual ~Angajat();
 };
 
-int Angajati::numarAngajati = 0;
+int Angajat::numarAngajati = 0;
 
 // Constructor cu parametri clasa Angajati
-Angajati::Angajati(string n, int s, int nr)
+Angajat::Angajat(string n, int s, int nr)
 {
     nume = n;
     salariu = s;
     numarAnimale = nr;
-    animale = new Animale *[numarAnimale];
+    animale = new Animal *[numarAnimale];
     numarAngajati++;
 }
 
-void Angajati::AnimaleIngrijite(int index, Animale *animal)
+void Angajat::AnimaleIngrijite(int index, Animal *animal)
 {
     animale[index] = animal;
 }
 
 // Supraincarcarea unei metode
-void Angajati::Salariu(int marire)
+void Angajat::Salariu(int marire)
 {
     if (numarAnimale > 2)
         salariu = salariu + (marire * salariu) / 100;
@@ -277,7 +278,7 @@ void Angajati::Salariu(int marire)
              << endl;
 }
 
-void Angajati::Salariu(double marire)
+void Angajat::Salariu(double marire)
 {
     if (numarAnimale > 2)
         salariu = salariu + marire * salariu;
@@ -287,19 +288,19 @@ void Angajati::Salariu(double marire)
              << endl;
 }
 
-void Angajati::setSalariu(int s)
+void Angajat::setSalariu(int s)
 {
     if (s <= 0)
         throw domain_error("Salariul nu poate fi 0 sau negativ!");
     salariu = s;
 }
 
-int Angajati::getSalariu()
+int Angajat::getSalariu()
 {
     return salariu;
 }
 
-void Angajati::Afisare()
+void Angajat::Afisare()
 {
     cout << "Nume: " << nume << endl;
     cout << "Salariu: " << salariu << endl;
@@ -314,20 +315,20 @@ void Angajati::Afisare()
 }
 
 // Copy constructor
-Angajati::Angajati(const Angajati &angajat)
+Angajat::Angajat(const Angajat &angajat)
 {
     nume = angajat.nume;
     salariu = angajat.salariu;
     numarAnimale = angajat.numarAnimale;
-    animale = new Animale *[numarAnimale];
+    animale = new Animal *[numarAnimale];
     for (int i = 0; i < numarAnimale; i++)
     {
-        animale[i] = new Animale(*angajat.animale[i]);
+        animale[i] = new Animal(*angajat.animale[i]);
     }
 }
 
 // Operator=
-Angajati &Angajati::operator=(const Angajati &angajat)
+Angajat &Angajat::operator=(const Angajat &angajat)
 {
     if (this != &angajat)
     {
@@ -337,29 +338,31 @@ Angajati &Angajati::operator=(const Angajati &angajat)
         salariu = angajat.salariu;
         numarAnimale = angajat.numarAnimale;
 
-        animale = new Animale *[numarAnimale];
+        animale = new Animal *[numarAnimale];
 
         for (int i = 0; i < numarAnimale; i++)
         {
-            animale[i] = new Animale(*angajat.animale[i]);
+            animale[i] = new Animal(*angajat.animale[i]);
         }
     }
 
     return *this;
 }
 
-int Angajati::getNrAngajati()
+int Angajat::getNrAngajati()
 {
     return numarAngajati;
 }
 
 // Destructor VIRTUAL - memoria alocata dinamic e eliberata
-Angajati::~Angajati()
+Angajat::~Angajat()
 {
     delete[] animale;
     numarAngajati--;
 }
 
+
+//EXCEPTIE facuta de mine
 class SalariuPreaMareException : public std::exception
 {
 public:
@@ -370,14 +373,14 @@ public:
 };
 
 // Mostenire 1
-class Director : protected Angajati
+class Director : protected Angajat
 {
 public:
-    Director();
+    Director() {};
     Director(string nume, int salariu);
     virtual ~Director() {}
 
-    void schimbaSalariu(Angajati &a, int s)
+    void schimbaSalariu(Angajat &a, int s)
     {
         if (s > 5000)
         {
@@ -388,57 +391,60 @@ public:
     }
 };
 
-Director::Director(string nume, int salariu) : Angajati(nume, salariu, 0) {}
+Director::Director(string nume, int salariu) : Angajat(nume, salariu, 0) {}
 
-class Veterinar : public Animale, public Angajati
+class Veterinar : public Animal, public Angajat
 {
 public:
+    Veterinar(){};
     Veterinar(string nume, int salariu);
     virtual ~Veterinar() {}
+   
 
-    void examineaza(Animale &a, string stare)
+    void examineaza(Animal &a, string stare)
     {
 
         a.setStareDeSanatate(stare);
     }
 };
 
-Veterinar::Veterinar(string nume, int salariu) : Angajati(nume, salariu, 0) {}
+Veterinar::Veterinar(string nume, int salariu) : Angajat(nume, salariu, 0) {}
 
-class SpatiiAnimale
+
+class SpatiuAnimale
 {
 private:
     int numar_animale;
 
 protected:
-    Animale animal;
+    Animal animal;
 
 public:
-    SpatiiAnimale();
-    SpatiiAnimale(Animale &a);
+    SpatiuAnimale(){};
+    SpatiuAnimale(Animal &a);
     void AdaugaAnimal(int nr_animale);
     void StergeAnimal(int nr_animale);
     void Afisare();
-    virtual ~SpatiiAnimale() {}
+    virtual ~SpatiuAnimale() {}
 };
 
-SpatiiAnimale::SpatiiAnimale(Animale &a)
+SpatiuAnimale::SpatiuAnimale(Animal &a)
 {
     animal = a;
     numar_animale = 0;
 }
 
-void SpatiiAnimale::AdaugaAnimal(int nr_animale)
+void SpatiuAnimale::AdaugaAnimal(int nr_animale)
 {
     numar_animale += nr_animale;
 }
 
-void SpatiiAnimale::StergeAnimal(int nr_animale)
+void SpatiuAnimale::StergeAnimal(int nr_animale)
 {
     numar_animale -= nr_animale;
 }
 
-void SpatiiAnimale::Afisare()
+void SpatiuAnimale::Afisare()
 {
 
     cout << "In spatiul amenajat pentru animalul " << animal.getDenumire() << " sunt " << numar_animale << " animale." << endl
@@ -447,18 +453,21 @@ void SpatiiAnimale::Afisare()
 }
 
 // Mostenire 2
-class Acvatic : public SpatiiAnimale
+class Acvatic : public SpatiuAnimale
 {
 private:
     int adancime;
 
 public:
-    Acvatic(Animale &a, int ad);
-    ~Acvatic() {}
+    Acvatic(){};
+    Acvatic(Animal &a, int ad);
+    ~Acvatic() {
+        cout<<"Destructor Acvatic apelat.";
+    }
     void Afisare();
 };
 
-Acvatic::Acvatic(Animale &a, int ad) : SpatiiAnimale(a), adancime(ad)
+Acvatic::Acvatic(Animal &a, int ad) : SpatiuAnimale(a), adancime(ad)
 {
 
     if (ad > 10)
@@ -477,7 +486,7 @@ void Acvatic::Afisare()
 class IContract
 {
 public:
-    virtual void achizitieAnimale(Animale &a) = 0;
+    virtual void achizitieAnimale(Animal &a) = 0;
     virtual void achizitieHrana() = 0;
     virtual ~IContract() {}
 };
@@ -485,7 +494,7 @@ public:
 class Achizitii : public IContract
 {
 public:
-    void achizitieAnimale(Animale &a) override
+    void achizitieAnimale(Animal &a) override
     {
         cout << "A fost achizitionat animalul " << a.getDenumire() << endl;
     }
@@ -541,6 +550,36 @@ public:
     }
 };
 
+
+//ETAPA 3
+
+template <typename T>
+class Lista {
+private:
+    struct Nod {
+        T element;
+        Nod* urmator;
+        Nod(T element, Nod* urmator = nullptr)
+            : element(element), urmator(urmator) {}
+    };
+
+    Nod* primul;
+    int dimensiune;
+
+public:
+    Lista() : primul(nullptr), dimensiune(0) {}
+
+    void adauga(T element) {
+        Nod* nod = new Nod(element, primul);
+        primul = nod;
+        dimensiune++;
+    }
+
+    Nod* inceput() { return primul; }
+
+};
+
+
 int main()
 { /*
      // Exemplu de afisare a unei cateogorii de animal
@@ -555,7 +594,7 @@ int main()
      // Metoda 1 - Venit total dupa vanzarea tuturor categoriilor de bilete
      BileteVandute();*/
 
-    Animale leu("Leu", 5, "Mamifer", "Da");
+    Animal leu("Leu", 5, "Mamifer", "Da");
     cout << leu
          << "---------------------------" << endl
          << endl;
@@ -566,9 +605,9 @@ int main()
     hrana.Afisare();
     hrana.RezervareMancare();
 
-    Angajati angajatZoo("John Smith", 4000, 3);
-    Animale tigru("Tigru", 3, "Mamifer", true);
-    Animale urs("Urs", 7, "Mamifer", true);
+    Angajat angajatZoo("John Smith", 4000, 3);
+    Animal tigru("Tigru", 3, "Mamifer", true);
+    Animal urs("Urs", 7, "Mamifer", true);
 
     angajatZoo.AnimaleIngrijite(0, &leu);
     angajatZoo.AnimaleIngrijite(1, &tigru);
@@ -580,10 +619,10 @@ int main()
     angajatZoo.Afisare();
 
     // Apelez constructorul de copiere
-    Angajati angajatZoo2 = angajatZoo;
+    Angajat angajatZoo2 = angajatZoo;
     angajatZoo2.Afisare();
 
-    Angajati angajatZoo3("Michael Davis", 4500, 2);
+    Angajat angajatZoo3("Michael Davis", 4500, 2);
     angajatZoo3.AnimaleIngrijite(0, &tigru);
     angajatZoo3.AnimaleIngrijite(1, &leu);
 
@@ -594,7 +633,7 @@ int main()
     angajatZoo3.Afisare();
 
     // Metoda 4 - Adaugare/Eliminare animale (d)in spatiul special amenajat
-    SpatiiAnimale spatiu(leu);
+    SpatiuAnimale spatiu(leu);
     spatiu.AdaugaAnimal(3);
     spatiu.Afisare();
     spatiu.StergeAnimal(1);
@@ -603,7 +642,7 @@ int main()
     // ETAPA 2
 
     // MOSTENIRE
-    Animale delfin("Delfin", 2, "Mamifer", "Da");
+    Animal delfin("Delfin", 2, "Mamifer", "Da");
     Acvatic acvariu(delfin, 5);
     acvariu.Afisare();
 
@@ -619,7 +658,6 @@ int main()
          << "---------------------------" << endl
          << endl;
 
-    // am sarit peste metoda protected
 
     Achizitii achizitii;
     achizitii.achizitieAnimale(leu);
@@ -636,7 +674,11 @@ int main()
          << "---------------------------" << endl
          << endl;
 
-    // am sarit peste POLIMORFISM LA EXECUTIE
+    //Destructor virtual
+    SpatiuAnimale* pSpatiu = new Acvatic(delfin,10);
+    delete pSpatiu;
+     cout << endl<<"---------------------------" << endl
+         << endl;
 
     try
     {
@@ -649,7 +691,7 @@ int main()
              << endl;
     }
 
-    Animale babuin;
+    Animal babuin;
 
     try
     {
@@ -711,10 +753,33 @@ int main()
     catch (domain_error ex)
     {
         cout << "Exceptie2: " << ex.what() << endl;
+          cout << "---------------------------" << endl
+             << endl;
     }
 
-    cout << "Numarul de angajati este " << angajatZoo2.getNrAngajati() << endl;
-    cout << "Numarul de animale este " << babuin.getNumarAnimale();
+    cout << "Numarul de angajati este " << angajatZoo2.getNrAngajati() << endl
+      << "---------------------------" << endl
+             << endl;
+    cout << "Numarul de animale este " << babuin.getNumarAnimale() << endl
+      << "---------------------------" << endl
+             << endl;
+
+  
+    //ETAPA 3
+    Lista<Angajat*> angajati;
+    angajati.adauga(new Veterinar("Ion Popescu", 3000));
+    angajati.adauga(new Veterinar("Maria Ionescu", 2500));
+
+
+    /*for (auto i = angajati.inceput(); i != nullptr; i = i->urmator) {
+    cout << i->element->getSalariu()<< endl;
+    }*/
+
+
+    cout << "Numarul de angajati este " << angajatZoo2.getNrAngajati() << endl
+      << "---------------------------" << endl
+             << endl;
+
 
     return 0;
 }
