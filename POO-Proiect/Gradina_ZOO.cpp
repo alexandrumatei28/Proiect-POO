@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
+#include <algorithm>
+#include <memory>
 using namespace std;
 
 class Animal
@@ -16,8 +19,8 @@ public:
     Animal();
     Animal(string n, int v, string s, bool c);
 
-    string getDenumire();
-    int getVarsta();
+    string getDenumire() const;
+    int getVarsta() const;
     string getSpecie();
     bool getCarnivora();
     string getStareDeSanatate();
@@ -62,12 +65,12 @@ istream &operator>>(istream &is, Animal &animal)
 
 Animal::Animal(string n, int v, string s, bool c) : denumire(n), varsta(v), specie(s), carnivora(c) {}
 
-string Animal::getDenumire()
+string Animal::getDenumire() const
 {
     return denumire;
 }
 
-int Animal::getVarsta()
+int Animal::getVarsta() const
 {
     return varsta;
 }
@@ -244,7 +247,7 @@ public:
     void Salariu(int marire);
     void Salariu(double marire);
     void setSalariu(int salariu);
-    int getSalariu();
+    int getSalariu() const;
     static int getNrAngajati(); 
     void Afisare();
     virtual ~Angajat();
@@ -295,7 +298,7 @@ void Angajat::setSalariu(int s)
     salariu = s;
 }
 
-int Angajat::getSalariu()
+int Angajat::getSalariu() const
 {
     return salariu;
 }
@@ -372,12 +375,24 @@ public:
     }
 };
 
-// Mostenire 1
+// Mostenire 1  - Design pattern SINGLETON - pentru a avea o singura instanta a clasei Director
 class Director : protected Angajat
 {
-public:
+    static Director* instance;
+    Director(const string& nume, int salariu);
     Director() {};
-    Director(string nume, int salariu);
+    static int numarInstante;
+
+public:
+    static int getNrInstante();
+
+    static Director* getInstance(const std::string& nume, int varsta) {
+        if (instance == nullptr) {
+            instance = new Director(nume, varsta);
+        }
+        return instance;
+    }
+    
     virtual ~Director() {}
 
     void schimbaSalariu(Angajat &a, int s)
@@ -391,7 +406,16 @@ public:
     }
 };
 
-Director::Director(string nume, int salariu) : Angajat(nume, salariu, 0) {}
+
+int Director::numarInstante = 0;
+int Director::getNrInstante()
+{
+    return numarInstante;
+}
+
+
+Director* Director::instance = nullptr;
+Director::Director(const string& nume, int salariu) : Angajat(nume, salariu, 0) { numarInstante++;}
 
 class Veterinar : public Animal, public Angajat
 {
@@ -559,7 +583,7 @@ private:
     struct Nod {
         T element;
         Nod* urmator;
-        Nod(T element, Nod* urmator = nullptr)
+        Nod(const T& element, Nod* urmator = nullptr)
             : element(element), urmator(urmator) {}
     };
 
@@ -569,15 +593,50 @@ private:
 public:
     Lista() : primul(nullptr), dimensiune(0) {}
 
-    void adauga(T element) {
+    void adauga(const T& element) {
         Nod* nod = new Nod(element, primul);
         primul = nod;
         dimensiune++;
     }
 
-    Nod* inceput() { return primul; }
+    Nod* inceput() const { return primul; }
 
 };
+
+
+// metoda template
+template <typename T>
+double calculeazaMediaSalariilor(const Lista<T>& angajati) {
+    double sumaSalarii = 0;
+    int numarAngajati = 0;
+
+    for (auto i = angajati.inceput(); i != nullptr; i = i->urmator) {
+        const Angajat* angajat = i->element;
+        sumaSalarii += angajat->getSalariu();
+        numarAngajati++;
+    }
+
+    if (numarAngajati > 0) {
+        return sumaSalarii / numarAngajati;
+    } else {
+        return 0;
+    }
+}
+
+
+double calculeazaMediaVarsta(const vector<Animal*>& animale) {
+    int numarAnimale = animale.size();
+    int sumaVarste = 0;
+
+    
+    for (const Animal* animal : animale) {
+        sumaVarste += animal->getVarsta();
+    }
+
+    double mediaVarsta = sumaVarste / numarAnimale;
+
+    return mediaVarsta;
+}
 
 
 int main()
@@ -593,6 +652,9 @@ int main()
 
      // Metoda 1 - Venit total dupa vanzarea tuturor categoriilor de bilete
      BileteVandute();*/
+
+
+    vector<Animal*> animale;
 
     Animal leu("Leu", 5, "Mamifer", "Da");
     cout << leu
@@ -648,8 +710,8 @@ int main()
 
     // MOSTENIRE
 
-    Director director("Elon Musk", 7000);
-    director.schimbaSalariu(angajatZoo3, 5000);
+    Director* director = Director::getInstance("Elon Musk", 7000);
+    director->schimbaSalariu(angajatZoo3, 5000);
     angajatZoo3.Afisare();
 
     Veterinar vet("Alex Matei", 6000);
@@ -682,7 +744,7 @@ int main()
 
     try
     {
-        director.schimbaSalariu(angajatZoo3, 6000);
+        director->schimbaSalariu(angajatZoo3, 6000);
     }
     catch (const SalariuPreaMareException &e)
     {
@@ -742,7 +804,7 @@ int main()
     {
         try
         {
-            director.schimbaSalariu(angajatZoo3, 6000);
+            director->schimbaSalariu(angajatZoo3, 6000);
         }
         catch (const SalariuPreaMareException &e)
         {
@@ -765,21 +827,67 @@ int main()
              << endl;
 
   
-    //ETAPA 3
+
+    // ETAPA 3
+
+
+    // template si metoda template
     Lista<Angajat*> angajati;
     angajati.adauga(new Veterinar("Ion Popescu", 3000));
     angajati.adauga(new Veterinar("Maria Ionescu", 2500));
-
+    angajati.adauga(new Veterinar("Dan Stroe", 4500));
 
     /*for (auto i = angajati.inceput(); i != nullptr; i = i->urmator) {
     cout << i->element->getSalariu()<< endl;
     }*/
 
-
     cout << "Numarul de angajati este " << angajatZoo2.getNrAngajati() << endl
       << "---------------------------" << endl
              << endl;
 
+    
+    //am folosit clasa si metoda template pentru a calcula salariul mediu al angajatilor
+    double mediaSalariilor = calculeazaMediaSalariilor(angajati);
+        cout << "Media salariilor angajatilor: " << mediaSalariilor << endl
+      << "---------------------------" << endl<< endl;
+
+
+
+    
+    animale.push_back(&leu);
+    animale.push_back(&tigru);
+    animale.push_back(&urs);
+    animale.push_back(&delfin);
+
+    double media = calculeazaMediaVarsta(animale);
+        cout << "Media varstei animalelor este: " << media << endl
+      << "---------------------------" << endl<< endl;
+
+
+    
+    //https://stackoverflow.com/questions/33314653/sorting-a-vector-of-custom-objects-by-overloading
+    sort(animale.begin(),animale.end(), [](const Animal* lhs, const Animal* rhs){return lhs->getVarsta() < rhs->getVarsta();});
+
+
+    for (const Animal* animal : animale) {
+         cout<<"Denumire animal: "<<animal->getDenumire()<<" | Varsta: ";
+        cout<<animal->getVarsta()<<endl;
+    } 
+    cout<< "---------------------------" << endl<< endl;
+
+
+    // VECTOR STL
+    //Smart pointer UNIQUE
+      vector<unique_ptr<Animal>> ani;
+    ani.push_back(make_unique<Animal>("Girafa", 2, "Mamifer", "Nu"));
+    ani.push_back(make_unique<Animal>("Zebra", 7, "Mamifer", "Nu"));
+    ani.push_back(make_unique<Animal>("Jaguar", 5, "Mamifer", "Da"));
+
+for (const auto& animal : ani) {
+        animal->getDenumire();
+    }
+
+   //cout<< director->getNrInstante();
 
     return 0;
 }
